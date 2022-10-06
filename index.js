@@ -5,13 +5,14 @@ const {
 
 const app = express();
 
-const { 
-  OIDC_DISCOVER_URL,
+const {
+  CLIENT_PORT = 3001,
+  PROVIDER_PORT = 3000,
+  OIDC_DISCOVER_URL = `http://localhost:${PROVIDER_PORT}`,
   CLIENT_ID,
   CLIENT_SECRET,
-  CLIENT_REGISTRATION_TOKEN,
-  EXTERNAL_URL,
-  EXTERNAL_URL_OPENID_CLIENT,
+  CLIENT_REGISTRATION_TOKEN = 'abc123jklfs',
+  EXTERNAL_URL_OPENID_CLIENT = `http://localhost:${CLIENT_PORT}`,
 } = process.env;  
 
 const init = async () => {
