@@ -39,16 +39,19 @@ const init = async () => {
       })
   );
 
-  const code_verifier = generators.codeVerifier();
-  const authorizationURL = client.authorizationUrl({
-    code_challenge: generators.codeChallenge(code_verifier),
-    code_challenge_method: 'S256',
+  app.get('/', async (req, res) => {
+    const code_verifier = generators.codeVerifier();
+    const authorizationURL = client.authorizationUrl({
+      code_challenge: generators.codeChallenge(code_verifier),
+      code_challenge_method: 'S256',
+      state: code_verifier,
+    });
+    res.redirect(authorizationURL)
   });
-  app.get('/', (req, res) => res.redirect(authorizationURL));
 
   app.get('/callback', async (req, res) => {
     try {
-      const params = client.callbackParams(req);
+      const { state: code_verifier, ...params } = client.callbackParams(req);
 
       const tokenSet = await client.callback(`${EXTERNAL_URL_OPENID_CLIENT}/callback`, params, { code_verifier });
       const userinfo = await client.userinfo(tokenSet);
@@ -58,7 +61,7 @@ const init = async () => {
         claims: { ...tokenSet.claims() },
         userinfo: { ...userinfo },
       };
-      res.send(`Success: ${data}`);
+      res.send(`Success: <pre>${JSON.stringify(data, ' ', 2)}</pre>`);
     } catch (e) {
       res.status(500).send(`Failure: ${e.message}`);
     }
