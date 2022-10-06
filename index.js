@@ -56,6 +56,8 @@ const init = async () => {
       res.send(`success: ${data}`);
     }
   );
+
+  app.listen(CLIENT_PORT);
 };
 
 init();
