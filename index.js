@@ -43,7 +43,6 @@ const init = async () => {
   const authorizationURL = client.authorizationUrl({
     code_challenge: generators.codeChallenge(code_verifier),
     code_challenge_method: 'S256',
-    scope: 'openid offline_access',
   });
   app.get('/', (req, res) => res.redirect(authorizationURL));
 
