@@ -47,8 +47,8 @@ const init = async () => {
   });
   app.get('/', (req, res) => res.redirect(authorizationURL));
 
-  app.get('/callback',
-    async (req, res) => {
+  app.get('/callback', async (req, res) => {
+    try {
       const params = client.callbackParams(req);
 
       const tokenSet = await client.callback(`${EXTERNAL_URL_OPENID_CLIENT}/callback`, params, { code_verifier });
@@ -60,8 +60,10 @@ const init = async () => {
         userinfo: { ...userinfo },
       };
       res.send(`success: ${data}`);
+    } catch (e) {
+      res.status(500).send(`Failure ${e.message}`);
     }
-  );
+  });
 
   app.listen(CLIENT_PORT);
 };
