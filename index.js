@@ -16,18 +16,18 @@ const {
   EXTERNAL_URL_OPENID_CLIENT = `http://localhost:${CLIENT_PORT}`,
 } = process.env;  
 
+const clientOptions = {
+  client_id: CLIENT_ID,
+  client_secret: CLIENT_SECRET,
+  redirect_uris: [
+    `${EXTERNAL_URL_OPENID_CLIENT}/callback`,
+  ],
+  response_types: ['code'],
+  grant_types: ['authorization_code', 'refresh_token'],
+};
+
 const init = async () => {
   const issuer = await Issuer.discover(OIDC_DISCOVER_URL);
-
-  const clientOptions = {
-    client_id: CLIENT_ID,
-    client_secret: CLIENT_SECRET,
-    redirect_uris: [
-      `${EXTERNAL_URL_OPENID_CLIENT}/callback`,
-    ],
-    response_types: ['code'],
-    grant_types: ['authorization_code', 'refresh_token'],
-  };
 
   const client = (
     CLIENT_REGISTRATION_TOKEN
