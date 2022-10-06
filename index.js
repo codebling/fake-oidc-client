@@ -59,9 +59,9 @@ const init = async () => {
         claims: { ...tokenSet.claims() },
         userinfo: { ...userinfo },
       };
-      res.send(`success: ${data}`);
+      res.send(`Success: ${data}`);
     } catch (e) {
-      res.status(500).send(`Failure ${e.message}`);
+      res.status(500).send(`Failure: ${e.message}`);
     }
   });
 
