@@ -1,6 +1,7 @@
 const express = require('express');
 const { 
   Issuer,
+  generators,
 } = require('openid-client');
 
 const app = express();
@@ -38,8 +39,13 @@ const init = async () => {
       })
   );
 
-  app.get('/', (req, res) => res.redirect(client.authorizationUrl()));
-
+  const code_verifier = generators.codeVerifier();
+  const authorizationURL = client.authorizationUrl({
+    code_challenge: generators.codeChallenge(code_verifier),
+    code_challenge_method: 'S256',
+    scope: 'openid offline_access',
+  });
+  app.get('/', (req, res) => res.redirect(authorizationURL));
 
   app.get('/callback',
     async (req, res) => {
